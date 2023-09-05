@@ -7,7 +7,42 @@
  */
 void push_stack(stack_t **top, unsigned int line_number)
 {
-    /* Implementation for pushing an element onto the stack goes here */
+    stack_t *new_node;
+    char *value;
+
+    if (!top)
+    {
+        fprintf(stderr, "Error: top is NULL\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if (n == 0)
+    {
+        fprintf(stderr, "L%u: usage: push integer\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    value = strtok(NULL, " \n");
+    if (!value)
+    {
+        fprintf(stderr, "L%u: usage: push integer\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    new_node = malloc(sizeof(stack_t));
+    if (!new_node)
+    {
+        fprintf(stderr, "Error: malloc failed\n");
+        exit(EXIT_FAILURE);
+    }
+
+    new_node->n = atoi(value);
+    new_node->prev = NULL;
+    new_node->next = *top;
+
+    if (*top)
+        (*top)->prev = new_node;
+    *top = new_node;
 }
 
 /**
@@ -17,7 +52,15 @@ void push_stack(stack_t **top, unsigned int line_number)
  */
 void pall_stack(stack_t **top, unsigned int line_number)
 {
-    /* Implementation for printing all values on the stack goes here */
+    stack_t *current = *top;
+
+    (void)line_number;
+
+    while (current)
+    {
+        printf("%d\n", current->n);
+        current = current->next;
+    }
 }
 
 /**
@@ -26,7 +69,14 @@ void pall_stack(stack_t **top, unsigned int line_number)
  */
 void free_stack(stack_t *top)
 {
-    /* Implementation for freeing the stack memory goes here */
+    stack_t *current = top;
+
+    while (current)
+    {
+        stack_t *next = current->next;
+        free(current);
+        current = next;
+    }
 }
 
 /**
@@ -36,7 +86,13 @@ void free_stack(stack_t *top)
  */
 void pint_stack(stack_t **top, unsigned int line_number)
 {
-    /* Implementation for printing the value at the top of the stack goes here */
+    if (!top || !*top)
+    {
+        fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("%d\n", (*top)->n);
 }
 
 /**
@@ -46,5 +102,18 @@ void pint_stack(stack_t **top, unsigned int line_number)
  */
 void pop_stack(stack_t **top, unsigned int line_number)
 {
-    /* Implementation for popping the top element from the stack goes here */
+    stack_t *temp;
+
+    if (!top || !*top)
+    {
+        fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    temp = *top;
+    *top = (*top)->next;
+    if (*top)
+        (*top)->prev = NULL;
+
+    free(temp);
 }

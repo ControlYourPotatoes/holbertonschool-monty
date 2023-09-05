@@ -1,72 +1,54 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "monty.h"
 
-#define STACK_SIZE 100
+int n = 0;
 
-/* Define a stack and a variable to keep track of the top of the stack */
-int stack[STACK_SIZE];
-int top = -1; /* Initialize top to -1 to indicate an empty stack */
-
-/* Function to push an integer onto the stack */
-void push(int value)
+/**
+ * monty_prog - Monty bytecode interpreter program
+ * @argv: Command-line arguments, including the Monty bytecode file name.
+ */
+void monty_prog(char **argv)
 {
-    if (top >= STACK_SIZE - 1)
-    {
-        fprintf(stderr, "Error: Stack overflow\n");
-        exit(EXIT_FAILURE);
-    }
-    stack[++top] = value;
-}
+    char *file_name = argv[1];
+    char *buf = NULL;
+    size_t len = 0;
+    ssize_t line_size;
+    unsigned int line_number = 0;
+    stack_t *stack = NULL;
 
-/* Function to print all values on the stack */
-void pall()
-{
-    for (int i = top; i >= 0; i--)
+    FILE *fp = fopen(file_name, "r");
+    if (!fp)
     {
-        printf("%d\n", stack[i]);
-    }
-}
-
-int main(int argc, char *argv[])
-{
-    if (argc != 2)
-    {
-        fprintf(stderr, "Usage: %s <input_file>\n", argv[0]);
+        fprintf(stderr, "Error: Can't open file %s\n", file_name);
         exit(EXIT_FAILURE);
     }
 
-    FILE *file = fopen(argv[1], "r");
-    if (file == NULL)
+    while ((line_size = getline(&buf, &len, fp)) != -1)
     {
-        perror("Error opening file");
-        exit(EXIT_FAILURE);
-    }
+        line_number++;
+        char *token;
+        char *saveptr;
 
-    char opcode[20]; /* Assuming opcode won't be longer than 20 characters */
-    int arg;         /* Variable to store argument for push */
+        /* Tokenize the input line */
+        token = strtok_r(buf, " \t\n", &saveptr);
 
-    while (fscanf(file, "%s", opcode) != EOF)
-    {
-        if (strcmp(opcode, "push") == 0)
+        if (token)
         {
-            if (fscanf(file, "%d", &arg) != 1)
+            void (*op_func)(stack_t **, unsigned int);
+
+            /* Get the function pointer for the opcode */
+            op_func = get_op_code(token, line_number);
+
+            /* Call the appropriate function with the remaining arguments */
+            if (op_func)
             {
-                fprintf(stderr, "Error: usage: push integer\n");
-                exit(EXIT_FAILURE);
+                token = strtok_r(NULL, " \t\n", &saveptr);
+                n = token ? atoi(token) : 0; /* Set global variable n */
+                op_func(&stack, line_number);
             }
-            push(arg);
-        }
-        else if (strcmp(opcode, "pall") == 0)
-        {
-            pall();
-        }
-        else
-        {
-            fprintf(stderr, "Error: Invalid opcode: %s\n", opcode);
-            exit(EXIT_FAILURE);
         }
     }
 
-    fclose(file);
-    return 0;
+    free(buf);
+    fclose(fp);
+    free_stack(stack);
 }
