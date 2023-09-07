@@ -1,5 +1,5 @@
 #include "monty.h"
-
+int number;
 /**
  * push_stack - Pushes an element onto the stack.
  * @top: A pointer to the top of the stack.
@@ -7,59 +7,26 @@
  */
 void push_stack(stack_t **top, unsigned int line_number)
 {
-    stack_t *new_node;
-    char *value;
-
-    if (!top)
-    {
-        fprintf(stderr, "Error: top is NULL\n");
-        exit(EXIT_FAILURE);
-    }
-
-    if (n == 0)
-    {
-        fprintf(stderr, "L%u: usage: push integer\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    value = strtok(NULL, " \n");
-    if (!value)
-    {
-        fprintf(stderr, "L%u: usage: push integer\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    new_node = malloc(sizeof(stack_t));
-    if (!new_node)
-    {
-        fprintf(stderr, "Error: malloc failed\n");
-        exit(EXIT_FAILURE);
-    }
-
-    new_node->n = atoi(value);
-    new_node->prev = NULL;
-    new_node->next = *top;
-
-    if (*top)
-        (*top)->prev = new_node;
-    *top = new_node;
-}
-
-/**
- * pall_stack - Prints all values on the stack.
- * @top: A pointer to the top of the stack.
- * @line_number: The line number in the Monty file.
- */
-void pall_stack(stack_t **top, unsigned int line_number)
-{
-    stack_t *current = *top;
+    stack_t *newNode;
 
     (void)line_number;
+    newNode = malloc(sizeof(stack_t));
 
-    while (current)
+    if (newNode == NULL)
+        malloc_error();
+
+    newNode->n = number;
+    newNode->prev = NULL;
+    if (*top == NULL) /* validate if empty stack */
     {
-        printf("%d\n", current->n);
-        current = current->next;
+        newNode->next = NULL;
+        *top = newNode;
+    }
+    else /* if is not empty stack */
+    {
+        newNode->next = *top;
+        (*top)->prev = newNode;
+        *top = newNode;
     }
 }
 

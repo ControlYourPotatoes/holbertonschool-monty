@@ -14,6 +14,6 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);  
     }
         
-    monty_prog(argv);
+    open_and_read(argv);
     return (0);
 }

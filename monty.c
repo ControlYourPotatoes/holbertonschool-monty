@@ -1,54 +1,88 @@
 #include "monty.h"
-
-int n = 0;
-
+int number;
 /**
- * monty_prog - Monty bytecode interpreter program
- * @argv: Command-line arguments, including the Monty bytecode file name.
- */
-void monty_prog(char **argv)
+ * open_and_read -main entry.
+ *Description:Function that open, read and execute.
+ * @argv: arguments received by parameter
+ * Return: void
+ **/
+void open_and_read(char **argv)
 {
-    char *file_name = argv[1];
-    char *buf = NULL;
+    /* prototype from struct instructions*/
+    void (*p_func)(stack_t **, unsigned int);
+    FILE *fp;
+    char *buf = NULL, *token = NULL, command[1024];
     size_t len = 0;
     ssize_t line_size;
-    unsigned int line_number = 0;
-    stack_t *stack = NULL;
+    unsigned int line_counter = 1;
+    stack_t *top = NULL;
 
-    FILE *fp = fopen(file_name, "r");
-    if (!fp)
+    fp = fopen(argv[1], "r");
+    if (fp == NULL)
+        open_error(argv);
+    while ((line_size = getline(&buf, &len, fp)) != EOF)
     {
-        fprintf(stderr, "Error: Can't open file %s\n", file_name);
-        exit(EXIT_FAILURE);
-    }
-
-    while ((line_size = getline(&buf, &len, fp)) != -1)
-    {
-        line_number++;
-        char *token;
-        char *saveptr;
-
-        /* Tokenize the input line */
-        token = strtok_r(buf, " \t\n", &saveptr);
-
-        if (token)
+        token = strtok(buf, "\n\t\r ");
+        if (token == NULL)
+            continue;
+        strcpy(command, token);
+        if (is_comment(token, line_counter) == 1)
+            continue;
+        if (strcmp(token, "push") == 0)
         {
-            void (*op_func)(stack_t **, unsigned int);
-
-            /* Get the function pointer for the opcode */
-            op_func = get_op_code(token, line_number);
-
-            /* Call the appropriate function with the remaining arguments */
-            if (op_func)
-            {
-                token = strtok_r(NULL, " \t\n", &saveptr);
-                n = token ? atoi(token) : 0; /* Set global variable n */
-                op_func(&stack, line_number);
-            }
+            token = strtok(NULL, "\n\t\r ");
+            printf("%s\n", token);
+            if (token == NULL)
+                not_int_err(line_counter);
+            number = atoi(token); /* update global variable */
+            /*p_func will receive the function to execute*/
+            p_func = get_op_code(command, line_counter);
+            /* p_func takes the place of the function to execute: push, pall, etc*/
+            p_func(&top, line_counter);
         }
+        else
+        {
+            p_func = get_op_code(token, line_counter);
+            p_func(&top, line_counter);
+        }
+        line_counter++;
     }
-
-    free(buf);
     fclose(fp);
-    free_stack(stack);
+    if (buf != NULL)
+        free(buf);
+    free_stack(top);
+}
+/**
+ * is_number - check if string received is int or not
+ * @token: string to check
+ * Return: -1 if sring is not int or 1 if yes
+ */
+int is_number(char *token)
+{
+    int i;
+
+    if (token == NULL)
+        return (-1);
+
+    for (i = 0; token[i] != '\0'; i++)
+    {
+        if (token[i] != '-' && isdigit(token[i]) == 0)
+            return (-1);
+    }
+    return (1);
+}
+/**
+ * is_comment - check if string received is # or not
+ * @token: string to check
+ * @line_counter: line
+ * Return: -1 if sring is not # or 1 if yes
+ */
+int is_comment(char *token, int line_counter)
+{
+    if (token == NULL || token[0] == '#')
+    {
+        line_counter++;
+        return (1);
+    }
+    return (-1);
 }

@@ -54,5 +54,16 @@ void _mul(stack_t **top, unsigned int line);
 void (*get_op_code(char *token, unsigned int line))(stack_t **, unsigned int);
 void monty_prog(char **argv);
 
+/* error_handler functions */
+void error_arguments(void);
+void open_error(char **);
+void invalidInstruction_error(char *invInstruction, unsigned int line);
+void not_int_err(unsigned int line);
+void malloc_error(void);
+
+/* executer functions*/
+void open_and_read(char **argv);
+int is_number(char *token);
+int is_comment(char *token, int line_counter);
 
 #endif
