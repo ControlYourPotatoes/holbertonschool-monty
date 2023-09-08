@@ -32,7 +32,7 @@ void monty_prog(char **argv)
         if (strcmp(token, "push") == 0)
         {
             token = strtok(NULL, "\n\t\r ");
-            printf("%s\n", token);
+            
             if (token == NULL)
                 not_int_err(line_counter);
             number = atoi(token); /* update global variable */

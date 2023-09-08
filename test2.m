@@ -5,5 +5,4 @@ push 3
 add
 sub
 mul
-div
 pall
