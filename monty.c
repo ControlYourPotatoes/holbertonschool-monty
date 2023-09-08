@@ -1,12 +1,12 @@
 #include "monty.h"
-int number;
+int number = -1;
 /**
  * open_and_read -main entry.
  *Description:Function that open, read and execute.
  * @argv: arguments received by parameter
  * Return: void
  **/
-void open_and_read(char **argv)
+void monty_prog(char **argv)
 {
     /* prototype from struct instructions*/
     void (*p_func)(stack_t **, unsigned int);
@@ -28,6 +28,7 @@ void open_and_read(char **argv)
         strcpy(command, token);
         if (is_comment(token, line_counter) == 1)
             continue;
+
         if (strcmp(token, "push") == 0)
         {
             token = strtok(NULL, "\n\t\r ");
@@ -52,6 +53,8 @@ void open_and_read(char **argv)
         free(buf);
     free_stack(top);
 }
+
+
 /**
  * is_number - check if string received is int or not
  * @token: string to check
@@ -85,4 +88,34 @@ int is_comment(char *token, int line_counter)
         return (1);
     }
     return (-1);
+}
+
+/**
+ * tokenization - extract tokens from the getline command
+ *
+ * @ptr: String of the command line
+ * @delim: Delimiter
+ * Return: the array of tokens
+ * Description: We first allocate space for the array of tokens.
+ */
+char **tokenization(char *ptr, char *delim)
+{
+    char *token = NULL, **tokens = NULL;
+    int i = 0;
+
+    tokens = malloc(sizeof(char *) * 10);
+    token = strtok(ptr, delim);
+
+    while (token)
+    {
+        tokens[i] = malloc(sizeof(char) * strlen(token) + 1);
+        strcpy(tokens[i], token);
+        i++;
+        token = NULL;
+        token = strtok(NULL, delim);
+    }
+
+    tokens[i] = NULL;
+    free(token);
+    return (tokens);
 }

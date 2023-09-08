@@ -9,27 +9,29 @@
  */
 void (*get_op_code(char *token, unsigned int line))(stack_t **, unsigned int)
 {
-    instruction_t op_codes[] = {
+    int i;
+    instruction_t operation[] = {
         {"push", push_stack},
         {"pall", pall_stack},
         {"pint", pint_stack},
         {"pop", pop_stack},
         {"swap", _swap},
+        {"nop", _nop},
         {"add", _add},
         {"sub", _sub},
         {"div", _div},
         {"mul", _mul},
-        /* Add more opcodes as needed */
-        {NULL, NULL} /* Terminate the array with NULL entries */
-    };
-
-    int i = 0;
-
-    while (op_codes[i].opcode) /*check for each opcode*/
+        {"mod", _mod},
+        {"rotl", rotl_stack},
+        {"rotr", rotr_stack},
+        {"pchar", _pchar},
+        {NULL, NULL}};
+    for (i = 0; operation[i].opcode != NULL; i++)
     {
-        if (strcmp(op_codes[i].opcode, token) == 0)
-            return (op_codes[i].f);
-        i++;
+        if (strcmp(token, operation[i].opcode) == 0)
+        {
+            return (operation[i].f);
+        }
     }
     /* if not found*/
     fprintf(stderr, "L%u: unknown instruction %s\n", line, token);
