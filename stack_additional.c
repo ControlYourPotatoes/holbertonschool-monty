@@ -97,7 +97,7 @@ void _pchar(stack_t **top, unsigned int line_number)
 
     if (*top == NULL)
     {
-        fprintf(stderr, "L%u: can't pchar, value out of range\n", line_number);
+        fprintf(stderr, "L%u: can't pchar, stack empty\n", line_number);
         exit(EXIT_FAILURE);
     }
         
@@ -106,7 +106,7 @@ void _pchar(stack_t **top, unsigned int line_number)
 
     if (ascii_num < 0 || ascii_num > 127)
     {
-        fprintf(stderr, "L%u: can't pchar, stack empty\n", line_number);
+        fprintf(stderr, "L%u: can't pchar, value out of range\n", line_number);
         exit(EXIT_FAILURE);
     }
     putchar(ascii_num);
