@@ -61,11 +61,17 @@ void _sub(stack_t **top, unsigned int line_number)
  */
 void _div(stack_t **top, unsigned int line_number)
 {
-    if (!top || !*top || !(*top)->next || (*top)->n == 0)
+    if (!top || !*top || !(*top)->next )
     {
         fprintf(stderr, "L%u: can't div, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
+    else ((*top)->n == 0)
+    {
+        fprintf(stderr, "L%u: division by zero\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
 
     (*top)->next->n /= (*top)->n;
     pop_stack(top, line_number);
