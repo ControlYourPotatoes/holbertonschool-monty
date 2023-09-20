@@ -63,7 +63,7 @@ void _div(stack_t **top, unsigned int line_number)
 {
     if (!top || !*top || !(*top)->next || (*top)->n == 0)
     {
-        fprintf(stderr, "L%u: can't div, stack too short or division by zero\n", line_number);
+        fprintf(stderr, "L%u: can't div, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
 
