@@ -24,9 +24,9 @@ void push_stack(stack_t **top, unsigned int line_number)
 	}
 	else /* if is not empty stack */
 	{
-	newNode->next = *top;
-	(*top)->prev = newNode;
-	*top = newNode;
+		newNode->next = *top;
+		(*top)->prev = newNode;
+		*top = newNode;
 	}
 }
 
@@ -39,14 +39,14 @@ void push_stack(stack_t **top, unsigned int line_number)
  **/
 void pall_stack(stack_t **top, unsigned int line_number)
 {
-    stack_t *tmp = *top;
-    (void)line_number;
+	stack_t *tmp = *top;
+	(void)line_number;
 
-    while (tmp != NULL)
-    {
-        printf("%d\n", tmp->n);
-        tmp = tmp->next;
-    }
+	while (tmp != NULL)
+	{
+		printf("%d\n", tmp->n);
+		tmp = tmp->next;
+	}
 }
 
 /**
@@ -55,14 +55,15 @@ void pall_stack(stack_t **top, unsigned int line_number)
  */
 void free_stack(stack_t *top)
 {
-    stack_t *current = top;
+	stack_t *current = top;
 
-    while (current)
-    {
-        stack_t *next = current->next;
-        free(current);
-        current = next;
-    }
+	while (current)
+	{
+		stack_t *next = current->next;
+
+		free(current);
+		current = next;
+	}
 }
 
 /**
@@ -72,13 +73,13 @@ void free_stack(stack_t *top)
  */
 void pint_stack(stack_t **top, unsigned int line_number)
 {
-    if (!top || !*top)
-    {
-        fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	if (!top || !*top)
+	{
+		fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
-    printf("%d\n", (*top)->n);
+	printf("%d\n", (*top)->n);
 }
 
 /**
@@ -88,20 +89,20 @@ void pint_stack(stack_t **top, unsigned int line_number)
  */
 void pop_stack(stack_t **top, unsigned int line_number)
 {
-    stack_t *temp;
+	stack_t *temp;
 
-    if (!top || !*top)
-    {
-        fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	if (!top || !*top)
+	{
+		fprintf(stderr, "L%u: can't pop an empty stack\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
-    temp = *top;
-    *top = (*top)->next;
-    if (*top)
-        (*top)->prev = NULL;
+	temp = *top;
+	*top = (*top)->next;
+	if (*top)
+		(*top)->prev = NULL;
 
-    free(temp);
+	free(temp);
 }
 
 
