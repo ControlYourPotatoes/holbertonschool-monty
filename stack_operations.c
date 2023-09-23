@@ -7,17 +7,17 @@
  */
 void _swap(stack_t **top, unsigned int line_number)
 {
-    int temp;
+	int temp;
 
-    if (!top || !*top || !(*top)->next)
-    {
-        fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	if (!top || !*top || !(*top)->next)
+	{
+		fprintf(stderr, "L%u: can't swap, stack too short\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
-    temp = (*top)->n;
-    (*top)->n = (*top)->next->n;
-    (*top)->next->n = temp;
+	temp = (*top)->n;
+	(*top)->n = (*top)->next->n;
+	(*top)->next->n = temp;
 }
 
 /**
@@ -27,14 +27,14 @@ void _swap(stack_t **top, unsigned int line_number)
  */
 void _add(stack_t **top, unsigned int line_number)
 {
-    if (!top || !*top || !(*top)->next)
-    {
-        fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	if (!top || !*top || !(*top)->next)
+	{
+		fprintf(stderr, "L%u: can't add, stack too short\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
-    (*top)->next->n += (*top)->n;
-    pop_stack(top, line_number);
+	(*top)->next->n += (*top)->n;
+	pop_stack(top, line_number);
 }
 
 /**
@@ -44,14 +44,14 @@ void _add(stack_t **top, unsigned int line_number)
  */
 void _sub(stack_t **top, unsigned int line_number)
 {
-    if (!top || !*top || !(*top)->next)
-    {
-        fprintf(stderr, "L%u: can't sub, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	if (!top || !*top || !(*top)->next)
+	{
+		fprintf(stderr, "L%u: can't sub, stack too short\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
-    (*top)->next->n -= (*top)->n;
-    pop_stack(top, line_number);
+	(*top)->next->n -= (*top)->n;
+	pop_stack(top, line_number);
 }
 
 /**
@@ -61,18 +61,18 @@ void _sub(stack_t **top, unsigned int line_number)
  */
 void _div(stack_t **top, unsigned int line_number)
 {
-    if (!top || !*top || !(*top)->next )
-    {
-        div_error(line_number);
-    }
-    else if((*top)->n == 0)
-    {
-        div_error2(line_number);
-    }
+	if (!top || !*top || !(*top)->next)
+	{
+		div_error(line_number);
+	}
+	else if ((*top)->n == 0)
+	{
+		div_error2(line_number);
+	}
 
 
-    (*top)->next->n /= (*top)->n;
-    pop_stack(top, line_number);
+	(*top)->next->n /= (*top)->n;
+	pop_stack(top, line_number);
 }
 
 /**
@@ -82,12 +82,12 @@ void _div(stack_t **top, unsigned int line_number)
  */
 void _mul(stack_t **top, unsigned int line_number)
 {
-    if (!top || !*top || !(*top)->next)
-    {
-        fprintf(stderr, "L%u: can't mul, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	if (!top || !*top || !(*top)->next)
+	{
+		fprintf(stderr, "L%u: can't mul, stack too short\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
-    (*top)->next->n *= (*top)->n;
-    pop_stack(top, line_number);
+	(*top)->next->n *= (*top)->n;
+	pop_stack(top, line_number);
 }
